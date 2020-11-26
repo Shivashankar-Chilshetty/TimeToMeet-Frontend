@@ -1,0 +1,65 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"
+    aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item">
+        <a class="nav-link btn btn-lg" [routerLink]="['/adminPage']">
+          <i style="color: black;" class="fa fa-arrow-left" aria-hidden="true"></i>
+          <b>AdminHome</b>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link btn btn-lg" [routerLink]="['/add-meeting',userId]">
+          <i style="color: black;" class="fa fa-plus-circle" aria-hidden="true"></i>
+          <b>Schedule Meeting</b></a>
+      </li>
+    </ul>
+  </div>
+</nav>
+
+
+
+
+<div class="col-12 text-center" *ngIf="flag && events.length==0">
+  <h3 class="text-warning">
+    <i class="fa fa-close"></i>You do not have any Meeting scheduled yet!</h3>
+  <p class="text-info">Click on 'Schedule A Meet' button to schedule your meeting</p>
+</div>
+<br>
+
+
+<div class="container">
+  <div class="row text-center">
+
+    <div class="col-3 col-sm-3 btn btn-primary" mwlCalendarPreviousView [view]="view" [(viewDate)]="viewDate"
+      (viewDateChange)="closeOpenMonthViewDay()">
+      <i class="fa fa-arrow-left" aria-hidden="true"></i>
+      Previous Month
+    </div>
+
+    <div class="col-6 col-sm-6">
+      <h3>{{ viewDate | calendarDate:(view + 'ViewTitle'):'en' }}</h3>
+    </div>
+
+    <div class="col-3 col-sm-3 btn btn-primary" mwlCalendarNextView [view]="view" [(viewDate)]="viewDate"
+      (viewDateChange)="closeOpenMonthViewDay()">
+      Next Month
+      <i class="fa fa-arrow-right" aria-hidden="true"></i>
+    </div>
+  </div>
+</div>
+
+
+<div class="container">
+  <div class="row">
+    <div class="col-12">
+      <mwl-calendar-month-view [viewDate]="viewDate" [refresh]="refresh" [events]="events"
+        [activeDayIsOpen]="activeDayIsOpen" (dayClicked)="dayClicked($event.day)"
+        (eventClicked)="handleEvent($event.event)">
+      </mwl-calendar-month-view>
+    </div>
+  </div>
+</div>

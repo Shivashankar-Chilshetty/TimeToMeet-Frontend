@@ -1,0 +1,42 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand"> Admin Dashboard</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"
+        aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+        <div class="navbar-nav">
+            <a class="nav-item nav-link" (click)="logout()">Logout</a>
+            <span class="navbar-text">
+                Hello {{name|uppercase}}
+            </span>
+        </div>
+    </div>
+</nav>
+
+<br><br>
+
+<div class="container">
+    <div class="row">
+        <div class="col-12 text-center" *ngIf="flag && users.length==0">
+            <h3 class="text-warning">
+                <i class="fa fa-close"></i>No Active Users Found!</h3>
+            <p class="text-info">Oops! No users registered to <b
+                    style="font-family: cursive,sans-serif;">'TimeToMeet'</b> application.</p>
+        </div>
+    </div>
+</div>
+
+<div class="container p-4" *ngIf="users.length!=0" style="border: ridge;">
+    <h2 class="text-center">List of Users</h2>
+    <p class="text-center">Active User List</p>
+    <div class="row p-4">
+        <div class="col-sm-12 list-group m-2" style="border-left: ridge;">
+            <a [routerLink]="['/meeting-home',users[i].userId]"
+                class="list-group-item list-group-item-action list-group-item-light"
+                *ngFor="let u of users; let i=index;">
+                <h3>{{u.firstName+' '+u.lastName}}</h3>
+            </a>
+        </div>
+    </div>
+</div>

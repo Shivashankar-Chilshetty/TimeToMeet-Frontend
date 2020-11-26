@@ -1,0 +1,123 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+                <a class="nav-link" [routerLink]="['/login']"><b>Login</b></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" [routerLink]="['/signup']"><b>Sign-up</b></a>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+<br>
+<!--for all small devices & devices larger then this, keep column size 6 & move to right by 3 columns & display the div -->
+<div class="container">
+    <div class="row">
+        <div class="col-sm-6 offset-sm-3 p-4" style="border: ridge;">
+            <h4 class="text-center" style="font-family: cursive,sans-serif;">TimeToMeet signup</h4>
+            <p class="text-center">You can sign-up here</p>
+            <br>
+            <form #signupForm="ngForm" (ngSubmit)="signupFunction()">
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="fa fa-user fa-fw" aria-hidden="true"></i></span>
+                    </div>
+                    <!--If the firstName input field is touched & its invalid then apply bootstrap-4 class is-invalid(red color border)-->
+                    <input type="text" id="inputFirstName" name="firstName" #fName="ngModel"
+                        [class.is-invalid]="fName.invalid && fName.touched" class="form-control" [(ngModel)]="firstName"
+                        placeholder="firstName" required autofocus>
+                </div>
+                <!--if firstName input field is valid or untouched then set display property to none(i,e dont display any error message)-->
+                <small class="text-danger" [class.d-none]="fName.valid || fName.untouched">**firstName is
+                    required</small>
+                <br>
+
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="fa fa-user fa-fw" aria-hidden="true"></i></span>
+                    </div>
+                    <!--If the lastName input field is touched & its invalid then apply bootstrap-4 class is-invalid(red color border)-->
+                    <input type="text" id="inputLastName" name="lastName" #lName="ngModel"
+                        [class.is-invalid]="lName.invalid && lName.touched" class="form-control" [(ngModel)]="lastName"
+                        placeholder="lastName" required>
+                </div>
+                <!--if lastName input field is valid or untouched then set display property to none(i,e dont display any error message)-->
+                <small class="text-danger" [class.d-none]="lName.valid || lName.untouched">**lastName is
+                    required</small>
+                <br>
+
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="fa fa-globe fa-fw" aria-hidden="true"></i></span>
+                    </div>
+                    <select class="form-control" (change)="selectChangeHandler($event)">
+                        <option>Select country code</option>
+                        <option *ngFor="let c of country|keyvalue" [value]="c.key">{{c.key}}-{{c.value}}</option>
+                    </select>
+                </div>
+                <br>
+
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="fa fa-phone fa-fw" aria-hidden="true"></i></span>
+                    </div>
+                    <input type="tel" id="inputMobile" name="mobile" #mobile="ngModel" pattern="^\d{10}$"
+                        [class.is-invalid]="mobile.invalid && mobile.touched" class="form-control"
+                        [(ngModel)]="mobileNumber" placeholder="Mobile Number" required>
+                </div>
+                <div *ngIf="mobile.errors && (mobile.valid || mobile.touched)">
+                    <small class="text-danger" *ngIf="mobile.errors.required">
+                        ** Mobile number is required
+                    </small>
+                    <small class="text-danger" *ngIf="mobile.errors.pattern">
+                        ** Mobile number must be 10 digits
+                    </small>
+                </div>
+                <br>
+
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="fa fa-envelope fa-fw" aria-hidden="true"></i></span>
+                    </div>
+                    <!--If the email input field is touched & its invalid then apply bootstrap-4 class is-invalid(red color border)-->
+                    <input type="email" id="inputEmail" name="email" #mail="ngModel"
+                        [class.is-invalid]="mail.invalid && mail.touched" class="form-control" [(ngModel)]="email"
+                        placeholder="Email address" required>
+                </div>
+                <!--if email input field is valid or untouched then set display property to none(i,e dont display any error message)-->
+                <small class="text-danger" [class.d-none]="mail.valid || mail.untouched">**Email is
+                    required</small>
+                <br>
+
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="fa fa-key fa-fw" aria-hidden="true"></i></span>
+                    </div>
+                    <!--If the password input field is touched & its invalid then apply bootstrap-4 class is-invalid(red color border)-->
+                    <input type="password" id="inputPassword" name="password" #pass="ngModel"
+                        [class.is-invalid]="pass.invalid && pass.touched" class="form-control" [(ngModel)]="password"
+                        placeholder="Password" minlength="8" required>
+                </div>
+                <!--If errors object is defined for password input field & if the field is touched or valid, within the block, then display below error messages accordingly-->
+                <div *ngIf="pass.errors && (pass.valid || pass.touched)">
+                    <!--if the password input field is left empty-->
+                    <small class="text-danger" *ngIf="pass.errors.required">** Password is required</small>
+                    <!--if the entered password is less then 8 characters-->
+                    <small class="text-danger" *ngIf="pass.errors.minlength">** Password should contain atleast 8
+                        characters!</small>
+                </div>
+                <br>
+                <button type="submit" class="btn btn-lg btn-primary btn-block" [disabled]="signupForm.form.invalid">Sign
+                    Up</button>
+
+                <!--{{signupForm.value|json}}-->
+            </form>
+        </div>
+    </div>
+</div>

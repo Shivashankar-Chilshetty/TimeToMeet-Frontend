@@ -1,0 +1,90 @@
+<br>
+<h2 class="text-center">Meeting Details</h2>
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <table class="table table-striped">
+                        <tbody>
+                            <tr>
+                                <td>Meeting Name:</td>
+                                <td>{{ meetingName}}</td>
+                            </tr>
+                            <tr>
+                                <td>Meeting Description:</td>
+                                <td>{{ meetingDescription}}</td>
+                            </tr>
+                            <tr>
+                                <td>Meeting Start Date & Time:</td>
+                                <td>{{ meetingStartDateAndTime | date:'medium' }}</td>
+                            </tr>
+                            <tr>
+                                <td>Meeting End Date & Time:</td>
+                                <td>{{ meetingEndDateAndTime | date:'medium' }}</td>
+                            </tr>
+                            <tr>
+                                <td>Meeting Duration:</td>
+                                <td>{{meetingDuration | number}} Hour</td>
+                            </tr>
+                            <tr>
+                                <td>Organized By</td>
+                                <td>{{ organizerName }}</td>
+                            </tr>
+                            <tr>
+                                <td>Participant Name</td>
+                                <td>{{ participantName }}</td>
+                            </tr>
+                            <tr>
+                                <td>Meeting Address/Venue:</td>
+                                <td>{{ meetingLocation}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <br>
+                    <div class="container">
+                        <div class="row text-center">
+                            <div class="col-4">
+                                <a class="btn" [routerLink]="['/edit-meeting', meetingId]" data-toggle="tooltip"
+                                    title="Edit this meeting!">
+                                    <h1><i class="fa fa-pencil" aria-hidden="true" style="color: black;"></i></h1>
+                                </a>
+                            </div>
+
+                            <div class="col-4">
+                                <div class="btn" (click)="open(confirmDelete)" data-toggle="tooltip"
+                                    title="Delete this meeting!">
+                                    <h1><i class="fa fa-trash" aria-hidden="true" style="color: red;"></i></h1>
+                                </div>
+
+                            </div>
+
+                            <div class="col-4">
+                                <a class="btn" (click)="goBack()" data-toggle="tooltip" title="Go Back!">
+                                    <h1><i class="fa fa-arrow-left" aria-hidden="true"></i></h1>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<ng-template #confirmDelete let-close="close">
+    <div class="modal-header">
+        <h4 class="modal-title">Delete Meeting</h4>
+        <button type="button" class="close" aria-label="Close" (click)="close()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <h4 class="card-title">{{meetingName}}</h4>
+        <h6 class="card-title">Are you sure you want to delete the this meeting?</h6>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn btn-danger" (click)="deleteMeeting();close()">Delete</button>
+        <button type="button" class="btn btn-outline-secondary" (click)="close()">Cancel</button>
+    </div>
+</ng-template>

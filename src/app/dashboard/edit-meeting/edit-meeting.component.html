@@ -1,0 +1,136 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+                <a class="nav-link" [routerLink]="['/meeting-home', userId]"><b>Meeting-Home</b></a>
+            </li>
+            <li class="nav-item">
+                <span class="navbar-text">
+                    Hello {{organizerName|uppercase}}
+                </span>
+            </li>
+        </ul>
+    </div>
+
+</nav>
+<br>
+
+<div class="container" *ngIf="currentMeeting">
+    <div class="row p-4">
+        <div class="col-sm-12 p-4" style="border: ridge;background-color: whitesmoke;">
+
+            <h1 class="text-center" style="font-family: cursive,sans-serif;">TimeToMeet</h1>
+            <p class="text-center">Edit your meeting here</p>
+            <br>
+            <form #editMeeting="ngForm" (ngSubmit)="editMeetingFunction()">
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="fa fa-handshake-o fa-fw" aria-hidden="true"></i></span>
+                    </div>
+                    <!--If the meeting name input field is touched & its invalid then apply bootstrap-4 class is-invalid(red color border)-->
+                    <input type="text" id="inputMeetingName" name="meetingName" #meeting="ngModel"
+                        [class.is-invalid]="meeting.invalid && meeting.touched" class="form-control"
+                        [(ngModel)]="currentMeeting.meetingName" placeholder="Enter Meeting Name" required>
+                </div>
+                <!--if meeting name input field is valid or untouched then set display property to none(i,e dont display any error message)-->
+                <div class="text-danger">
+                    <small [class.d-none]="meeting.valid || meeting.untouched">** Meeting Name is
+                        Required!</small>
+                </div>
+
+                <br>
+
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="fa fa-info fa-fw" aria-hidden="true"></i></span>
+                    </div>
+                    <!--If the meeting description textarea input field is touched & its invalid then apply bootstrap-4 class is-invalid(red color border)-->
+                    <textarea id="inputMeetingDescription" name="meetingDescription" #meetingDesc="ngModel"
+                        [class.is-invalid]="meetingDesc.invalid && meetingDesc.touched" class="form-control"
+                        [(ngModel)]="currentMeeting.meetingDescription" placeholder="Enter Meeting Description"
+                        required>
+                    </textarea>
+                </div>
+                <!--if meeting description textarea input field is valid or untouched then set display property to none(i,e dont display any error message)-->
+                <div class="text-danger">
+                    <small [class.d-none]="meetingDesc.valid || meetingDesc.untouched">** Meeting
+                        Description is Required!</small>
+                </div>
+
+                <br>
+
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="fa fa-calendar fa-fw" aria-hidden="true"></i></span>
+                    </div>
+                    <input class="form-control" type="text" name="start" #startDate="ngModel" mwlFlatpickr
+                        [(ngModel)]="currentMeeting.meetingStartDateAndTime" [altInput]="true"
+                        [convertModelValue]="true" [enableTime]="true" dateFormat="Y-m-dTH:i" altFormat="F j, Y H:i"
+                        placeholder="Select Meeting Start Date & Time" />
+                </div>
+
+                <div class="text-danger">
+                    <small *ngIf="validateStartOrEndDate(currentMeeting.meetingStartDateAndTime)">** We Can't Schedule a
+                        Meeting for Past
+                        Date & Time, So Kindly Choose a Valid Start Date & Time!</small>
+                </div>
+                <br>
+
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="fa fa-calendar fa-fw" aria-hidden="true"></i></span>
+                    </div>
+                    <input class="form-control" type="text" name="end" mwlFlatpickr
+                        [(ngModel)]="currentMeeting.meetingEndDateAndTime" [altInput]="true" [convertModelValue]="true"
+                        [enableTime]="true" dateFormat="Y-m-dTH:i" altFormat="F j, Y H:i"
+                        placeholder="Select Meeting End Date & Time" />
+
+                </div>
+                <div class="text-danger">
+                    <small *ngIf="validateStartOrEndDate(currentMeeting.meetingEndDateAndTime)">** We Can't Schedule a
+                        Meeting for Past
+                        Date & Time, So Kindly Choose a Valid End Date &
+                        Time!</small>
+
+                </div>
+
+                <div class="text-danger">
+                    <small
+                        *ngIf="validateStartAndEndDate(currentMeeting.meetingStartDateAndTime,currentMeeting.meetingEndDateAndTime)">**
+                        End Date & Time Cannot be
+                        Before Start Date & Time, So Kindly Choose a Valid End Date & Time!</small>
+
+                </div>
+
+                <br>
+
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="fa fa-map-marker fa-fw" aria-hidden="true"></i></span>
+                    </div>
+                    <!--If the location input field is touched & its invalid then apply bootstrap-4 class is-invalid(red color border)-->
+                    <input type="text" id="inputMeetingLocation" name="meetingLoc" #location="ngModel"
+                        [class.is-invalid]="location.invalid && location.touched" class="form-control"
+                        [(ngModel)]="currentMeeting.meetingLocation" placeholder="Enter Meeting Location/Address"
+                        required>
+                </div>
+                <!--if location input field is valid or untouched then set display property to none(i,e dont display any error message)-->
+                <div class="text-danger">
+                    <small [class.d-none]="location.valid || location.untouched">** Meeting
+                        Location/Address is Required!</small>
+                </div>
+                <br><br>
+                <div class="text-center">
+                    <button type="submit" class="btn btn-lg btn-primary"
+                        [disabled]="editMeeting.form.invalid || validateStartOrEndDate(currentMeeting.meetingStartDateAndTime) || validateStartOrEndDate(currentMeeting.meetingEndDateAndTime) || validateStartAndEndDate(currentMeeting.meetingStartDateAndTime,currentMeeting.meetingEndDateAndTime) || !currentMeeting.meetingStartDateAndTime || !currentMeeting.meetingEndDateAndTime">Edit
+                        Meeting</button>
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>

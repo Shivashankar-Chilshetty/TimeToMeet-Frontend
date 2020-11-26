@@ -1,0 +1,134 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand"> Normal User Dashboard</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"
+        aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+        <div class="navbar-nav">
+            <a class="nav-item nav-link" (click)="logout()">Logout</a>
+            <span class="navbar-text">
+                Hello {{name|uppercase}}
+            </span>
+        </div>
+    </div>
+</nav>
+
+
+<br>
+<div class="col-12 text-center" *ngIf="flag && events.length==0">
+    <h3 class="text-warning">
+        <i class="fa fa-close"></i>You do not have any Meeting scheduled yet!</h3>
+</div>
+<br>
+
+<div class="container">
+    <div class="row text-center">
+        <div class="col-3 col-sm-3 btn btn-primary" mwlCalendarPreviousView [view]="view" [(viewDate)]="viewDate"
+            (viewDateChange)="closeOpenMonthViewDay()">
+            <i class="fa fa-arrow-left" aria-hidden="true"></i>
+            Previous Month
+        </div>
+        <div class="col-6 col-sm-6">
+            <h3>{{ viewDate | calendarDate:(view + 'ViewTitle'):'en' }}</h3>
+        </div>
+
+        <div class="col-3 col-sm-3 btn btn-primary" mwlCalendarNextView [view]="view" [(viewDate)]="viewDate"
+            (viewDateChange)="closeOpenMonthViewDay()">
+            Next Month
+            <i class="fa fa-arrow-right" aria-hidden="true"></i>
+        </div>
+    </div>
+</div>
+
+
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <mwl-calendar-month-view [viewDate]="viewDate" [refresh]="refresh" [events]="events"
+                [activeDayIsOpen]="activeDayIsOpen" (dayClicked)="dayClicked($event.day)"
+                (eventClicked)="handleEvent($event.event)">
+            </mwl-calendar-month-view>
+        </div>
+
+    </div>
+</div>
+
+<ng-template #meetingInfo let-close="close">
+    <div class="modal-header">
+        <h5 class="modal-title">Meeting Information</h5>
+        <button type="button" class="close" (click)="close()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                        <table class="table table-striped">
+                            <tbody>
+                                <tr>
+                                    <td>Meeting Name:</td>
+                                    <td>{{ modalData?.event.title}}</td>
+                                </tr>
+                                <tr>
+                                    <td>Meeting Description:</td>
+                                    <td>{{ modalData?.event.description}}</td>
+                                </tr>
+                                <tr>
+                                    <td>Meeting Start Date & Time:</td>
+                                    <td>{{ modalData?.event.start | date:'medium' }}</td>
+                                </tr>
+                                <tr>
+                                    <td>Meeting End Date & Time:</td>
+                                    <td>{{ modalData?.event.end | date:'medium' }}</td>
+                                </tr>
+                                <tr>
+                                    <td>Meeting Duration:</td>
+                                    <td>{{ modalData?.event.duration|number }} hour</td>
+                                </tr>
+                                <tr>
+                                    <td>Organized By:</td>
+                                    <td>{{ modalData?.event.organizerName }}</td>
+                                </tr>
+                                <tr>
+                                    <td>Meeting Address/Venue:</td>
+                                    <td>{{ modalData?.event.address}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-outline-secondary" (click)="close()">
+            OK
+        </button>
+    </div>
+</ng-template>
+
+
+<ng-template #meetingAlert let-close="close">
+    <div class="modal-header">
+        <h5 class="modal-title">Meeting Reminder</h5>
+        <button type="button" class="close" (click)="close()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <h6 class="card-title">Your meeting <span><i>'{{modalData?.event.title}}'</i></span> will start within a minute!
+        </h6>
+    </div>
+
+    <div class="modal-footer">
+        <button type="button" class="btn btn-outline-success"
+            (click)="modalData?.event.snoozeStatus=true;openMeetingAlertModal=true;close();snooze(modalData);">Snooze</button>
+        <button type="button" class="btn btn-outline-secondary"
+            (click)="modalData?.event.snoozeStatus=false;openMeetingAlertModal=true;close(); dismissFunction(modalData);">Dismiss</button>
+    </div>
+</ng-template>
